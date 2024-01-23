@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="card">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">sno</th>
+                <th scope="col">Title</th>
+                <th scope="col">QrImage</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dto: ${result.dtoList}">
+                <td >[[ ${dto.sno} ]]</td>
+                <td> <a th:href="@{'/store/view/' + ${dto.sno}}"> [[ ${dto.title} ]] </a></td>
+                <td>[[ ${dto.qrImage} ]]</td>
+            </tr>
+
+            </tbody>
+        </table>
+        <div style="margin: auto">
+            <ul class="pagination">
+                <li th:if="${result.prev }" class="page-item">
+                    <a class="page-link" th:href="@{ /store/list( page=${result.start -1})}" >Previous</a>
+                </li>
+
+                <li th:class="@{'page-item ' + ${num == result.current? 'active': ''}}" th:each="num : ${result.pageNumList}">
+                    <a class="page-link" th:href="@{ /store/list( page=${num} ) }">[[ ${num} ]]</a>
+                </li>
+
+                <li th:if="${result.next }" class="page-item">
+                    <a class="page-link" th:href="@{ /store/list( page=${result.end + 1} ) }">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                            onclick="closeModal()">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const msg = [[${msg}]];
+
+    console.log(msg)
+
+    const myModal = new bootstrap.Modal(document.querySelector('.modal'), null)
+
+    console.log(myModal)
+
+    if(msg){
+        myModal.show()
+    }
+
+    function closeModal(){
+        myModal.hide()
+    }
+
+</script>
+</body>
+</html>

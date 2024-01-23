@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<style>
+    .header {
+        background-color: darkseagreen;
+        height: 30vh;
+    }
+    .middle {
+        background-color: darkgray;
+        width: 50vw;
+    }
+
+
+</style>
+
+  <div class="header">
+      <h1>Header</h1>
+  </div>
+  <div layout:fragment="content" class="header middle">
+
+  </div>
+  <div>
+      <h1>Footer</h1>
+  </div>
+</body>
+</html>

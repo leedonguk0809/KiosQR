@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1>List Page</h1>
+    [[${list}]]
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const arr = [[${list}]];
+
+</script>
+
+</body>
+</html>

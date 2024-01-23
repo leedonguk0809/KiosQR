@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Store Dashboard</h1>
+
+
+    <div class="modal fcmModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="modalMsg">Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary closeModal"
+                            data-dismiss="modal"
+                            >Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript" th:type="module">
+
+    const auth = [[${#authentication.principal.username}]]
+
+    const myModal =  new bootstrap.Modal(document.querySelector('.fcmModal'), null)
+
+    const modalMsg = document.querySelector('.modalMsg')
+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+    import { getMessaging, getToken, onMessage  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js"
+
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDxyPpuTP0BqOi5yUUpM8Z52al-eGO0zI0",
+        authDomain: "f2024-2fcad.firebaseapp.com",
+        projectId: "f2024-2fcad",
+        storageBucket: "f2024-2fcad.appspot.com",
+        messagingSenderId: "579259842838",
+        appId: "1:579259842838:web:5c18618ba2033e2a961037",
+        measurementId: "G-FKC7TYJBJD"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    //console.log(app)
+
+    const messaging = getMessaging();
+
+    getToken(messaging, {vapidKey: "BBwChpLoT9nTncoc_zEMJLN1OeK6-Pc_cJ4Yz9gtvJaUvxI4q9AkNacFWTkTjisWWyFf4rjE_AevFDmVX-kEq2U"})
+        .then((currentToken) => {
+
+            if (currentToken) {
+
+                console.log(currentToken)
+
+                axios.post('/store/updateToken', {
+                    sno: auth,
+                    token: currentToken
+                })
+
+
+            } else {
+                console.log('No registration token available. Request permission to generate one.');
+
+            }
+        }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+        // ...
+    });
+    //console.log(messaging)
+
+    onMessage(messaging, (payload) => {
+        console.log('Message received. ', payload);
+
+        modalMsg.innerText = payload.notification.body
+        myModal.show()
+        // ...
+    });
+
+    const closeModal = () =>{
+        myModal.hide()
+    }
+
+    document.querySelector('.closeModal').addEventListener('click', closeModal,false)
+
+</script>
+</body>
+</html>
